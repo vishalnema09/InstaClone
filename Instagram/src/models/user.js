@@ -69,7 +69,7 @@ userSchema.statics.verifyToken = async function () {
   return jwt.verify(token, config.JWT_SECRET);
 };
 const userModel = mongoose.model("user", userSchema);
-const user = userModel.findOne();
+
 
 
 export default userModel;
