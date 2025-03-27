@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import redis from "../services/redis.service.js";
 
 export const registerUserValidator = [
   body("username")
@@ -11,6 +12,15 @@ export const registerUserValidator = [
 
   body("email").isEmail().withMessage("Invalid email address"),
 
+  body("password")
+    .isString()
+    .withMessage("Password must be a string")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 8 characters long"),
+];
+
+export const loginUserValidator = [
+  body("email").isEmail().withMessage("Invalid email address"),
   body("password")
     .isString()
     .withMessage("Password must be a string")

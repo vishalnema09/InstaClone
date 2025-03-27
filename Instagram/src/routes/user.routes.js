@@ -8,5 +8,10 @@ router.post(
   userMiddleware.registerUserValidator,
   userController.createUserController
 );
+router.post(
+  "/login",
+  userMiddleware.loginUserValidator,
+  userController.loginUserController
+);
 
 export default router;
