@@ -14,11 +14,13 @@ router.post(
   userController.loginUserController
 );
 
-router.get('/profile',
-  userMiddleware.authUser,
-  (req, res) => {
-      res.json(req.user);
-  }
-)
+router.get("/profile", userMiddleware.authUser, (req, res) => {
+  res.json(req.user);
+});
 
+router.get(
+  "/logout",
+  userMiddleware.authUser,
+  userController.logoutUserController,
+);
 export default router;
