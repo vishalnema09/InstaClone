@@ -34,6 +34,6 @@ export const loginUserController = async (req, res) => {
     return res.status(200).json({ user, token });
   } catch (error) {
     console.log(error);
-    res.status(401).send(error.message);
+    res.status(401).json(error.message);
   }
 };

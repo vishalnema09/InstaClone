@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     unique: [true, "Email is already exists"],
     trim: true,
     lowercase: true,
-    minlength: [3, "Email must be at least 3 characters"],
+    minlength: [6, "Email must be at least 3 characters"],
     maxlength: [40, "Email must be at most 50 characters"],
   },
   profileImage: {
@@ -37,7 +37,7 @@ userSchema.statics.hashPassword = async (password) => {
     throw new Error("Password is required");
   }
   const salt = await bcrypt.genSalt(10);
-  return await bcrypt.hash(password, salt);
+  return bcrypt.hash(password, salt);
 };
 
 userSchema.methods.comparePassword = async function (password) {
@@ -48,7 +48,7 @@ userSchema.methods.comparePassword = async function (password) {
   if (!this.password) {
     throw new Error("Password is required");
   }
-  return await bcrypt.compare(password, this.password);
+  return bcrypt.compare(password, this.password);
 };
 
 userSchema.methods.generateToken = function () {
@@ -62,7 +62,7 @@ userSchema.methods.generateToken = function () {
   return token;
 };
 
-userSchema.statics.verifyToken = async function () {
+userSchema.statics.verifyToken = function (token) {
   if (!token) {
     throw new Error("Token is required");
   }
