@@ -7,7 +7,7 @@ import mongoose from 'mongoose'
          type: String,
      },
      media: {
-         type: String,
+         type: Object,
          required: [ true, 'Media is required' ],
      },
      author: {
