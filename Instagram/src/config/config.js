@@ -10,6 +10,9 @@ const _config = {
   REDIS_PORT: process.env.REDIS_PORT,
   REDIS_PASSWORD: process.env.REDIS_PASSWORD,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
+  CLOUD_NAME: process.env.CLOUD_NAME,
+  API_KEY: process.env.API_KEY,
+  API_SECRET: process.env.API_SECRET,
 };
 
 const config = Object.freeze(_config);
