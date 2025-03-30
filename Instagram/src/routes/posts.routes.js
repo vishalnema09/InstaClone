@@ -11,4 +11,6 @@ router.post(
   postController.createPost
 );
 
+router.patch("/like/:postId", userMiddleware.authUser, postController.likePost);
+
 export default router;
