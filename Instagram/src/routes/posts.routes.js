@@ -10,7 +10,9 @@ router.post(
   postMiddleware.handleFileUpload,
   postController.createPost
 );
+router.get("/get-recent", userMiddleware.authUser, postController.getAllPosts);
 
+router.get("/get/:postId", userMiddleware.authUser, postController.getPost);
 router.patch("/like/:postId", userMiddleware.authUser, postController.likePost);
 
 router.patch(

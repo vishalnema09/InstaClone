@@ -25,7 +25,7 @@ export const createUser = async ({ username, email, password }) => {
 export const loginUser = async ({ email, password }) => {
   const user = await userModel.findOne({
     email,
-  });
+  }).select("+password");
 
   if (!user) {
     throw new Error("Invalid Credentials");
