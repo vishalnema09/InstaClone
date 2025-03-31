@@ -18,6 +18,10 @@ const postSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    commentsCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -25,47 +29,53 @@ const postSchema = new mongoose.Schema(
 );
 
 postSchema.statics.getRecentPosts = async function (limit, skip = 0) {
+  if (!limit) {
+    throw new Error("Limit is required");
+  }
 
-    if (!limit) {
-        throw new Error("Limit is required")
-    }
+  const posts = await this.find()
+    .sort({ createdAt: -1 })
+    .limit(limit > 10 ? 10 : limit)
+    .skip(skip)
+    .populate("author");
 
-    const posts = await this.find().sort({ createdAt: -1 })
-        .limit(limit > 10 ? 10 : limit)
-        .skip(skip)
-        .populate('author');
-
-    return posts;
-
-}
+  return posts;
+};
 postSchema.statics.isValidPostId = async function (postId) {
- 
-    if (!postId) {
-        throw new Error("Post is required")
-    }
+  if (!postId) {
+    throw new Error("Post is required");
+  }
 
-    const isValidPostId = mongoose.Types.ObjectId.isValid(postId);
+  const isValidPostId = mongoose.Types.ObjectId.isValid(postId);
 
-    return isValidPostId;
-
-}
+  return isValidPostId;
+};
 
 postSchema.methods.incrementLikeCount = async function () {
-
-    this.likesCount += 1;
-    await this.save();
-    return this;
-
-}
+  this.likesCount += 1;
+  await this.save();
+  return this;
+};
 
 postSchema.methods.decrementLikeCount = async function () {
-
-    this.likesCount -= 1;
-    await this.save();
-    return this;
+  this.likesCount -= 1;
+  await this.save();
+  return this;
+};
+postSchema.methods.incrementCommentCount = async function () {
+ 
+  this.commentsCount += 1;
+  await this.save();
+  return this;
 
 }
 
+postSchema.methods.decrementCommentCount = async function () {
+
+  this.commentsCount -= 1;
+  await this.save();
+  return this;
+}
 const postModel = mongoose.model("post", postSchema);
 
 export default postModel;
