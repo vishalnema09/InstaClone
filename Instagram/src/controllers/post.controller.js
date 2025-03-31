@@ -2,6 +2,7 @@ import { generateCaptionFromImageBuffer } from "../services/ai.service.js";
 import { uploadFile } from "../services/cloudStorage.service.js";
 import postModel from "../models/post.model.js";
 import likeModel from "../models/likes.model.js";
+import commentModel from "../models/comment.model.js";
 
 export const createPost = async (req, res, next) => {
   try {
@@ -138,6 +139,45 @@ export const removeLikePost = async (req, res, next) => {
     await post.decrementLikeCount();
 
     res.status(200).json({ message: "Post unliked" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const commentOnPost = async (req, res) => {
+  try {
+    let comment = null;
+    const { post, text, parentComment } = req.body;
+
+    const currentPost = await postModel.findById(post);
+
+    if (!currentPost) {
+      return res.status(404).json({ message: "post not found" });
+    }
+
+    if (parentComment) {
+      const isParentCommentExists = await commentModel.findById(parentComment);
+      comment = isParentCommentExists;
+
+      if (!isParentCommentExists) {
+        return res.status(404).json({ message: "parent comment not found" });
+      }
+    }
+
+    const newComment = await commentModel.create({
+      post,
+      user: req.user._id,
+      text,
+      parentComment: comment.parentComment || parentComment,
+    });
+
+    await currentPost.incrementCommentCount();
+
+    res.status(200).json({
+      comment: newComment,
+      message: "Comment created successfully",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal Server Error");

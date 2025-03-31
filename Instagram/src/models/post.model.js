@@ -63,19 +63,16 @@ postSchema.methods.decrementLikeCount = async function () {
   return this;
 };
 postSchema.methods.incrementCommentCount = async function () {
- 
   this.commentsCount += 1;
   await this.save();
   return this;
-
-}
+};
 
 postSchema.methods.decrementCommentCount = async function () {
-
   this.commentsCount -= 1;
   await this.save();
   return this;
-}
+};
 const postModel = mongoose.model("post", postSchema);
 
 export default postModel;

@@ -20,5 +20,11 @@ router.patch(
   userMiddleware.authUser,
   postController.removeLikePost
 );
+router.post(
+  "/comment",
+  userMiddleware.authUser,
+  postMiddleware.validateComment,
+  postController.commentOnPost
+);
 
 export default router;
