@@ -31,6 +31,16 @@ function initSocket(server) {
 
   io.on("connection", (socket) => {
     socket.join(socket.user._id.toString());
+
+    socket.on("chat-message", (data) => {
+      const { sender, receiver, text } = data;
+
+      io.to(receiver).emit("chat-message", {
+        sender,
+        text,
+      });
+    });
+
     socket.on("disconnect", () => {
       console.log("User disconnected");
       socket.leave(socket.user._id.toString());
